@@ -3,12 +3,15 @@ package com.cgvsu.protocurvefxapp;
 import javafx.geometry.Point2D;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 public class Function {
-    public static List<Point2D> function(List<Point2D> list) {
+
+    List<Point2D> list;
+    List<Point2D> rez = new ArrayList<>();
+
+    public Function(List<Point2D> list) {
         Comparator<Point2D> comparator = new Comparator<Point2D>() {
             @Override
             public int compare(Point2D o1, Point2D o2) {
@@ -16,14 +19,19 @@ public class Function {
                 return o1.getX() > o2.getX() ? 1 : -1;
             }
         };
-        Collections.sort(list, comparator);
-        List<Point2D> rez = new ArrayList<>();
+        list.sort(comparator);
+        this.list = list;
+        function();
+        rez.add(list.getFirst());
+    }
+
+    private List<Point2D> function() {
         int a = (int) list.get(0).getX() + 1;
         int b = (int) list.getLast().getX();
         for (; a <= b; a++) {
-            rez.add(new Point2D(a))
+            rez.add()
         }
     }
 
-    private static int
+    private static Point2D Polinom(int)
 }
