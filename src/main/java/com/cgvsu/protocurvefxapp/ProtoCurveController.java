@@ -53,20 +53,17 @@ public class ProtoCurveController {
         graphicsContext.fillOval(
                 clickPoint.getX() - POINT_RADIUS, clickPoint.getY() - POINT_RADIUS,  // Центрирование точки
                 2 * POINT_RADIUS, 2 * POINT_RADIUS);  // Размер точки
-
+        // Добавляем новую точку в список для дальнейшего использования
+        points.add(clickPoint);
         // Если уже есть хотя бы одна точка, рисуем линию от последней точки к новой
         if (points.size() > 1) {
-            final Point2D lastPoint = points.get(points.size() - 1);  // Получаем последнюю точку из списка
-            // Рисуем линию от последней точки к новой
             Function function = new Function(points);
             List<Point2D> list = function.getRez();
             for (int i = 1; i < list.size(); i++) {
                 graphicsContext.strokeLine(list.get(i - 1).getX(), list.get(i - 1).getY(), list.get(i).getX(), list.get(i).getY());
-
             }
         }
 
-        // Добавляем новую точку в список для дальнейшего использования
-        points.add(clickPoint);
+
     }
 }
