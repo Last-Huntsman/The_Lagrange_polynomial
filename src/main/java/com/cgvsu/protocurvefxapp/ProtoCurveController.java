@@ -4,11 +4,13 @@ import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ProtoCurveController {
 
@@ -19,7 +21,7 @@ public class ProtoCurveController {
     private Canvas canvas;  // Canvas - холст для рисования
 
     // Список для хранения точек, на которые пользователь нажимает
-    ArrayList<Point2D> points = new ArrayList<Point2D>();
+    ArrayList<Point2D> points = new ArrayList<>();
 
     // Метод, который вызывается автоматически после загрузки интерфейса
     @FXML
@@ -35,27 +37,25 @@ public class ProtoCurveController {
         // Устанавливаем обработчик для кликов мыши по canvas
         canvas.setOnMouseClicked(event -> {
             // Проверяем, что пользователь нажал левую кнопку мыши
-            switch (event.getButton()) {
-                case PRIMARY ->
-                        handlePrimaryClick(canvas.getGraphicsContext2D(), event);  // Обработка клика левой кнопкой
+            if (Objects.requireNonNull(event.getButton()) == MouseButton.PRIMARY) {
+                handlePrimaryClick(canvas.getGraphicsContext2D(), event);  // Обработка клика левой кнопкой
             }
         });
     }
 
     // Метод, который вызывается при нажатии левой кнопкой мыши
     private void handlePrimaryClick(GraphicsContext graphicsContext, MouseEvent event) {
-        // Создаем объект Point2D для хранения координат клика мыши
-        final Point2D clickPoint = new Point2D(event.getX(), event.getY());
+        points.add(new Point2D(event.getX(), event.getY()));
+
+        graphicsContext.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
         // Задаем радиус для точки, которая будет нарисована
         final int POINT_RADIUS = 3;
-        // Рисуем круг (точку) в месте клика с указанным радиусом
-        graphicsContext.fillOval(
-                clickPoint.getX() - POINT_RADIUS, clickPoint.getY() - POINT_RADIUS,  // Центрирование точки
-                2 * POINT_RADIUS, 2 * POINT_RADIUS);  // Размер точки
-        // Добавляем новую точку в список для дальнейшего использования
-        points.add(clickPoint);
-        // Если уже есть хотя бы одна точка, рисуем линию от последней точки к новой
+        for (Point2D point : points) {
+            graphicsContext.fillOval(
+                    point.getX() - POINT_RADIUS, point.getY() - POINT_RADIUS,  // Центрирование точки
+                    2 * POINT_RADIUS, 2 * POINT_RADIUS);  // Размер точки
+        }
         if (points.size() > 1) {
             Function function = new Function(points);
             List<Point2D> list = function.getRez();
