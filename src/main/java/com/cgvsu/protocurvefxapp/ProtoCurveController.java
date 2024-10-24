@@ -8,6 +8,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ProtoCurveController {
 
@@ -35,7 +36,8 @@ public class ProtoCurveController {
         canvas.setOnMouseClicked(event -> {
             // Проверяем, что пользователь нажал левую кнопку мыши
             switch (event.getButton()) {
-                case PRIMARY -> handlePrimaryClick(canvas.getGraphicsContext2D(), event);  // Обработка клика левой кнопкой
+                case PRIMARY ->
+                        handlePrimaryClick(canvas.getGraphicsContext2D(), event);  // Обработка клика левой кнопкой
             }
         });
     }
@@ -53,10 +55,15 @@ public class ProtoCurveController {
                 2 * POINT_RADIUS, 2 * POINT_RADIUS);  // Размер точки
 
         // Если уже есть хотя бы одна точка, рисуем линию от последней точки к новой
-        if (points.size() > 0) {
+        if (points.size() > 1) {
             final Point2D lastPoint = points.get(points.size() - 1);  // Получаем последнюю точку из списка
             // Рисуем линию от последней точки к новой
-            graphicsContext.strokeLine(lastPoint.getX(), lastPoint.getY(), clickPoint.getX(), clickPoint.getY());
+            Function function = new Function(points);
+            List<Point2D> list = function.getRez();
+            for (int i = 1; i < list.size(); i++) {
+                graphicsContext.strokeLine(list.get(i - 1).getX(), list.get(i - 1).getY(), list.get(i).getX(), list.get(i).getY());
+
+            }
         }
 
         // Добавляем новую точку в список для дальнейшего использования

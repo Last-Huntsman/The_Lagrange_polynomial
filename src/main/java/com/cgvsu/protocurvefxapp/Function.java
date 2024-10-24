@@ -10,6 +10,11 @@ public class Function {
 
     List<Point2D> list;
     List<Point2D> rez = new ArrayList<>();
+    int n ;
+
+    public List<Point2D> getRez() {
+        return rez;
+    }
 
     public Function(List<Point2D> list) {
         Comparator<Point2D> comparator = new Comparator<Point2D>() {
@@ -21,17 +26,30 @@ public class Function {
         };
         list.sort(comparator);
         this.list = list;
+        this.n= list.size();
         function();
-        rez.add(list.getFirst());
+//        if (list.getFirst().getX() != (int) list.getFirst().getX()) rez.add(list.getFirst());
     }
 
-    private List<Point2D> function() {
+    private void function() {
         int a = (int) list.get(0).getX() + 1;
-        int b = (int) list.getLast().getX();
+        int b = (int) list.get(n-1).getX();
         for (; a <= b; a++) {
-            rez.add()
+            rez.add(Polinom(a));
         }
+        if (list.get(n-1).getX()!=(int)list.get(n-1).getX()) rez.add(list.get(n-1));
     }
 
-    private static Point2D Polinom(int)
+    private  Point2D Polinom(int x) {
+        double y=0;
+        for (int i = 0; i <n; i++) {
+            double l =list.get(i).getY();
+            for (int j = 0; j < n; j++) {
+                if(i!=j){
+                    l=l*(x-list.get(j).getX())/(list.get(i).getX()-list.get(j).getX());
+                }
+            }
+        }
+        return new Point2D(x,y);
+    }
 }
