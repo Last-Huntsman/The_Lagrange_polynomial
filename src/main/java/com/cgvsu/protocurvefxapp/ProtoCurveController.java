@@ -7,6 +7,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,16 +46,19 @@ public class ProtoCurveController {
 
     // Метод, который вызывается при нажатии левой кнопкой мыши
     private void handlePrimaryClick(GraphicsContext graphicsContext, MouseEvent event) {
-        points.add(new Point2D(event.getX(), event.getY()));
-
-        graphicsContext.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-
-        // Задаем радиус для точки, которая будет нарисована
-        final int POINT_RADIUS = 3;
+        Point2D newpoint = new Point2D(event.getX(), event.getY());
         for (Point2D point : points) {
-            graphicsContext.fillOval(
-                    point.getX() - POINT_RADIUS, point.getY() - POINT_RADIUS,  // Центрирование точки
-                    2 * POINT_RADIUS, 2 * POINT_RADIUS);  // Размер точки
+            if (Math.abs(point.getX() - newpoint.getX()) < 3 && Math.abs(point.getY() - newpoint.getY()) < 3) {
+                return;
+            } else if (point.getX() == newpoint.getX()) {
+                Paintpoint(graphicsContext, newpoint, Color.RED);
+                return;
+            }
+        }
+        points.add(newpoint);
+        graphicsContext.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        for (Point2D point : points) {
+            Paintpoint(graphicsContext, point, Color.BLACK);
         }
         if (points.size() > 1) {
             Function function = new Function(points);
@@ -65,5 +69,14 @@ public class ProtoCurveController {
         }
 
 
+    }
+
+    private void Paintpoint(GraphicsContext graphicsContext, Point2D point, Color color) {
+        graphicsContext.setFill(color);
+        final int POINT_RADIUS = 3;
+        graphicsContext.fillOval(
+                point.getX() - POINT_RADIUS, point.getY() - POINT_RADIUS,  // Центрирование точки
+                2 * POINT_RADIUS, 2 * POINT_RADIUS);  // Размер точки
+        graphicsContext.setFill(Color.BLACK);
     }
 }
