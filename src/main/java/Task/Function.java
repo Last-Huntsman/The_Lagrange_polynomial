@@ -1,4 +1,4 @@
-package com.cgvsu.protocurvefxapp;
+package Task;
 
 import javafx.geometry.Point2D;
 
