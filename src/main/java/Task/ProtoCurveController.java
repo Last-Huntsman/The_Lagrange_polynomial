@@ -29,10 +29,10 @@ public class ProtoCurveController {
         anchorPane.prefHeightProperty().addListener((ov, oldValue, newValue) -> canvas.setHeight(newValue.doubleValue()));
 
         canvas.setOnMouseClicked(event -> {
-            loadPointsFromFile();
-//            if (Objects.requireNonNull(event.getButton()) == MouseButton.PRIMARY) {
-//                handlePrimaryClick(canvas.getGraphicsContext2D(), event);
-//            }
+//            loadPointsFromFile();
+            if (Objects.requireNonNull(event.getButton()) == MouseButton.PRIMARY) {
+                handlePrimaryClick(canvas.getGraphicsContext2D(), event);
+            }
         });
     }
 
@@ -58,9 +58,15 @@ public class ProtoCurveController {
             Function function = new Function(points);
             List<Point2D> list = function.getRez();
             for (int i = 1; i < list.size(); i++) {
-                if (list.get(i - 1).getY() > canvas.getHeight() + 10 || list.get(i).getY() > canvas.getHeight() + 10 ||
-                        list.get(i - 1).getY() < -10 || list.get(i).getY() < -10) continue;
-                graphicsContext.strokeLine(list.get(i - 1).getX(), list.get(i - 1).getY(), list.get(i).getX(), list.get(i).getY());
+                int k = 1000;
+                double y1 = list.get(i - 1).getY();
+                double y2 = list.get(i).getY();
+                if (y1 > canvas.getHeight() + k) y1 = k;
+                else if (y1 < -k) y1 = -k;
+                if (y2 > canvas.getHeight() + k) y2 = k;
+                else if (y2 < -k) y2 = -k;
+
+                graphicsContext.strokeLine(list.get(i - 1).getX(), y1, list.get(i).getX(), y2);
             }
             savePointsToFile();
         }
@@ -120,9 +126,14 @@ public class ProtoCurveController {
             Function function = new Function(points);
             List<Point2D> list = function.getRez();
             for (int i = 1; i < list.size(); i++) {
-                if (list.get(i - 1).getY() > canvas.getHeight() + 10 || list.get(i).getY() > canvas.getHeight() + 10 ||
-                        list.get(i - 1).getY() < -10 || list.get(i).getY() < -10) continue;
-                graphicsContext.strokeLine(list.get(i - 1).getX(), list.get(i - 1).getY(), list.get(i).getX(), list.get(i).getY());
+                int k = 1000;
+                double y1 = list.get(i - 1).getY();
+                double y2 = list.get(i).getY();
+                if (y1 > canvas.getHeight() + k) y1 = k;
+                else if (y1 < -k) y1 = -k;
+                if (y2 > canvas.getHeight() + k) y2 = k;
+                else if (y2 < -k) y2 = -k;
+                graphicsContext.strokeLine(list.get(i - 1).getX(), y1, list.get(i).getX(), y2);
             }
         }
     }

@@ -28,12 +28,12 @@ public class Function {
             return o1.getX() > o2.getX() ? 1 : -1;
         };
         list.sort(comparator);
-        for (int a=1; a <= 800; a++) {
+        for (double a=1; a <= 800; a+=0.1) {
             rez.add(Polinom(a));
         }
     }
 
-    private Point2D Polinom(int x) {
+    private Point2D Polinom(double x) {
         double y = 0;
         for (int i = 0; i < n; i++) {
             double l = list.get(i).getY();
