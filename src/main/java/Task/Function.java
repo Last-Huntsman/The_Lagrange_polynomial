@@ -28,14 +28,9 @@ public class Function {
             return o1.getX() > o2.getX() ? 1 : -1;
         };
         list.sort(comparator);
-
-        if (list.get(0).getX() != (int) list.get(0).getX()) rez.add(list.get(0));
-        int a = (int) list.get(0).getX() + 1;
-        int b = (int) list.get(n - 1).getX();
-        for (; a <= b; a++) {
+        for (int a=1; a <= 800; a++) {
             rez.add(Polinom(a));
         }
-        if (list.get(n - 1).getX() != (int) list.get(n - 1).getX()) rez.add(list.get(n - 1));
     }
 
     private Point2D Polinom(int x) {
