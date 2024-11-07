@@ -20,6 +20,7 @@ public class ProtoCurveController {
     AnchorPane anchorPane;
     @FXML
     private Canvas canvas;
+    private  WuLineDrawing wuLineDrawing;
 
     ArrayList<Point2D> points = new ArrayList<>();
 
@@ -27,6 +28,8 @@ public class ProtoCurveController {
     private void initialize() {
         anchorPane.prefWidthProperty().addListener((ov, oldValue, newValue) -> canvas.setWidth(newValue.doubleValue()));
         anchorPane.prefHeightProperty().addListener((ov, oldValue, newValue) -> canvas.setHeight(newValue.doubleValue()));
+
+        wuLineDrawing=new WuLineDrawing(canvas);
 
         canvas.setOnMouseClicked(event -> {
 //            loadPointsFromFile();
@@ -42,7 +45,7 @@ public class ProtoCurveController {
             if (Math.abs(point.getX() - newPoint.getX()) < 3 && Math.abs(point.getY() - newPoint.getY()) < 3) {
                 return;
             } else if (point.getX() == newPoint.getX()) {
-                paintPoint(graphicsContext, newPoint, Color.RED);
+                paintPoint(graphicsContext, newPoint, Color.RED, 3);
                 return;
             }
         }
@@ -51,7 +54,7 @@ public class ProtoCurveController {
         graphicsContext.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
         for (Point2D point : points) {
-            paintPoint(graphicsContext, point, Color.BLACK);
+            paintPoint(graphicsContext, point, Color.BLACK, 3);
         }
 
         if (points.size() > 1) {
@@ -66,21 +69,24 @@ public class ProtoCurveController {
                 if (y2 > canvas.getHeight() + k) y2 = k;
                 else if (y2 < -k) y2 = -k;
 
-                graphicsContext.strokeLine(list.get(i - 1).getX(), y1, list.get(i).getX(), y2);
+//                graphicsContext.strokeLine(list.get(i - 1).getX(), y1, list.get(i).getX(), y2);
+               wuLineDrawing.drawLine(list.get(i - 1).getX(), y1, list.get(i).getX(), y2);
             }
             savePointsToFile();
         }
     }
 
-    private void paintPoint(GraphicsContext graphicsContext, Point2D point, Color color) {
+    public void paintPoint(GraphicsContext graphicsContext, Point2D point, Color color, final int POINT_RADIUS) {
         graphicsContext.setFill(color);
-        final int POINT_RADIUS = 3;
         graphicsContext.fillOval(
                 point.getX() - POINT_RADIUS, point.getY() - POINT_RADIUS,
                 2 * POINT_RADIUS, 2 * POINT_RADIUS);
         graphicsContext.setFill(Color.BLACK);
 
     }
+
+
+
 
     // Сохранение точек в файл "test.txt" в текущей директории
     public void savePointsToFile() {
@@ -118,7 +124,7 @@ public class ProtoCurveController {
 
         // Отрисовка всех точек
         for (Point2D point : points) {
-            paintPoint(graphicsContext, point, Color.BLACK);
+            paintPoint(graphicsContext, point, Color.BLACK, 3);
         }
 
         // Отрисовка линий, если есть более одной точки
