@@ -28,7 +28,7 @@ public class Function {
             return o1.getX() > o2.getX() ? 1 : -1;
         };
         list.sort(comparator);
-        for (double a=1; a <= 800; a+=0.1) {
+        for (double a=1; a <= 800; a+=1) {
             rez.add(Polinom(a));
         }
     }
